@@ -1,34 +1,22 @@
-STATES = [
-  'AK', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-];
 
 Contacts = new Mongo.Collection('contacts');
 
 Contacts.before.insert(function (userId, doc) {
-  var gender = Random.choice(['men', 'women']);
-  var num = _.random(0, 50);
-  doc.avatarUrl = 'https://randomuser.me/api/portraits/thumb/' + gender + '/' + num + '.jpg';
+  //var gender = Random.choice(['men', 'women']);
+  //var num = _.random(0, 50);
+  //doc.avatarUrl = 'https://randomuser.me/api/portraits/thumb/' + gender + '/' + num + '.jpg';
 });
 
 Contacts.attachSchema(new SimpleSchema({
   name: {
     type: Object
   },
-  'name.first': {
+  'name.name': {
     type: String,
     label: 'First Name',
     autoform: {
       'label-type': 'floating',
-      placeholder: 'First Name'
-    },
-    max: 200
-  },
-  'name.last': {
-    type: String,
-    label: 'Last Name',
-    autoform: {
-      'label-type': 'floating',
-      placeholder: 'Last Name'
+      placeholder: 'Name'
     },
     max: 200
   },
@@ -74,14 +62,6 @@ Contacts.attachSchema(new SimpleSchema({
     type: String,
     max: 200
   },
-  'location.state': {
-    type: String,
-    autoform: {
-      options: _.map(STATES, function (state) {
-        return {label: state, value: state};
-      })
-    }
-  },
   details: {
     type: Object
   },
@@ -100,9 +80,16 @@ Contacts.attachSchema(new SimpleSchema({
     autoform: {
       type: 'toggle'
     }
-  },
-  avatarUrl: {
-    type: String,
-    optional: true
   }
 }));
+
+Contacts.search = function(query) {
+  if (!query) {
+    return;
+  }
+  var res = Contacts.find({
+    $or: [{'name.name': { $regex: query, $options: 'i' }},
+    {'details.notes': {$regex: query, $options:'i'}}]
+  });
+  return res;
+};

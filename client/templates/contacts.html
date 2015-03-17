@@ -7,13 +7,17 @@
     <button class="button button-clear" data-ion-modal="_contactsNew">{{> ionIcon icon="ios-plus-empty"}}</button>
   {{/contentFor}}
 
+  {{#contentFor "headerButtonLeft"}}
+    <button class="button button-clear" data-ion-modal="_search">{{> ionIcon icon="ios-search"}} </button>
+  {{/contentFor}}
+
   {{#ionView}}
     {{#ionContent}}
       {{#ionList}}
         {{#each contacts}}
           {{#ionItem path="contacts.show" buttonRight=true avatar=true class="item-icon-right"}}
-            <img src="{{avatarUrl}}">
-            {{name.first}} {{name.last}}
+            
+            {{name.name}} {{location.city}}
             {{> ionIcon icon="ios-arrow-forward" class="positive"}}
           {{/ionItem}}
         {{/each}}

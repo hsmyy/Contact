@@ -20,29 +20,6 @@ Contacts.attachSchema(new SimpleSchema({
     },
     max: 200
   },
-  emails: {
-    type: [Object]
-  },
-  'emails.$.address': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Email,
-    autoform: {
-      'label-type': 'placeholder',
-      placeholder: 'Email Address'
-    }
-  },
-  'emails.$.label': {
-    type: String,
-    label: 'Label',
-    autoform: {
-      options: [
-        {value: 'Work', label: 'Work'},
-        {value: 'Home', label: 'Home'},
-        {value: 'School', label: 'School'},
-        {value: 'Other', label: 'Other'}
-      ]
-    }
-  },
   priority: {
     type: String,
     optional: true,
